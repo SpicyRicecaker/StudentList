@@ -2,14 +2,61 @@
 #include <vector>
 #include <cstring>
 
+void add(vector<Student*>* stuList);
+void delete(vector<Student*>* stuList);
+void print(vector<Student*>* stuList);
+
 using namespace std;
 
 struct Student{
-  char firstName[46];
-  char lastName[46];
+  char fNm[46];
+  char lNm[46];
   int id;
   float gpa;
 };
+
+void add(vector<Student*>* stuList){
+      cout << "Please enter the first name of the student." << endl;
+
+      stuList.push_back(Student());
+      
+      while(true){
+        cin.get(stuList.at(stuList.size()-1).fNm, 50);
+        cin.clear();
+        cin.ignore(999, '\n');
+
+	if(stuList.at(stuList.size()-1).fNm != null){
+	  break;
+	}
+
+	cout << "The student's first name is empty..." << endl;
+      }
+
+      cout << "Please enter the last name of the student" << endl;
+      
+      while(true){
+	
+        cin.get(stuList.at(stuList.size()-1).lNm, 50);
+        cin.clear();
+        cin.ignore(999, '\n');
+
+	if(stuList.at(stuList.size()-1).lNm != null){
+	  break;
+	}
+
+	cout << "At least put \"snow\" or something" << endl;
+      }
+}
+
+void print(vector<Student*>* stuList){
+  for(int a = 0; a < stuList.size(); a++){
+    cout << "First Name: " << stuList.at(a).fNm << "." << "Last Name: " << stuList.at(a).lNm << "." << "ID: " << stuList.at(a).id << "." << "GPA: " << stuList.at(a).gpa << endl;  
+  }
+}
+
+void delete(vector<Student*>* stuList){
+
+}
 
 int main(){
 
@@ -17,7 +64,7 @@ int main(){
   
   bool running = true;
 
-  vector<Student> students;
+  vector <Student*>* stuList;
   
   while(running){
   
@@ -28,7 +75,7 @@ int main(){
       cin.clear();
       cin.ignore(999, '\n');
       
-      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
+      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "PRINT") || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
 	break;
       }
       
@@ -37,46 +84,12 @@ int main(){
     }
 
     if(strcmp(commandIn, "ADD") == 0){
-      
-      cout << "Please enter the first name of the student." << endl;
-
-      char fName[50];
-
-      while(true){
-        cin.get(fName, 50);
-        cin.clear();
-        cin.ignore(999, '\n');
-
-	if(fName != null){
-	  break;
-	}
-
-	cout << "The student's first name is empty..." << endl;
-      }
-
-      char lName[50];
-
-      while(true){
-        cin.get(lName, 50);
-        cin.clear();
-        cin.ignore(999, '\n');
-
-	if(lName != null){
-	  break;
-	}
-
-	cout << "At least put \"snow\" or something" << endl;
-      }
-
-      int
-
-      
-
-      
-      
+      add(stuList);      
+    }else if(strcmp(commandIn, "PRINT") == 0){
+      print(stuList);
     }
     else if(strcmp(commandIn, "DELETE") == 0){
-
+      delete(stuList);
     }
     else if(strcmp(commandIn, "QUIT") == 0){
       cout << "Program Will Now Exit." << endl;

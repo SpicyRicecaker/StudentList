@@ -54,24 +54,80 @@ void add(vector<Student*>* stuList){
   while(true){
 
     bool sixlen = false;
+    bool alldigit = true;
+    int numIn = 0;
     char in[8] = "";
     cin.get(in, 8);
     cin.clear();
     cin.ignore(999, '\n');
 
     for(int a = 0; a < strlen(in); a++){
-      
+      if(!isdigit(in[a])){
+	alldigit = false;
+      }
     }
-    
-    if(stuList->at(stuList->size()-1)->lNm != NULL){
+    if(alldigit && strlen(in) == 6){
+      for(int a = 0; a < strlen(in); a++){
+	numIn += (in[a]-48);
+	numIn *= 10;
+      }
+      numIn/=10;
+      stuList->at(stuList->size()-1)->id = numIn;
       break;
     }
+    
     int a;
     cin >> a;
     cin.clear();
-    cin.ignore(69420, '\n');
+    cin.ignore(999, '\n');
     
     cout << "Please enter a six digit number" << endl;
+  }
+
+  cout << "Please enter the GPA of the student" << endl;
+
+  while(true){
+    float gpaNum = 0;
+    float gpaNumL = 0;
+    char gpaIn[34];
+    int decInd = 0;
+    bool allDig = true;
+    bool onePeriod = false;
+    cin.get(gpaIn, 34);
+    cin.clear();
+    cin.ignore(999, '\n');
+    for(int a = 0; a < strlen(gpaIn); a++){
+      if(gpaIn[a]=='.' && onePeriod == false){
+	onePeriod = true;
+	if(gpaIn[a+1]==0){
+	  allDig = false;
+	  break;
+	}
+      }else if(!isdigit(gpaIn[a])){
+	allDig = false;
+	break;
+      }
+    }
+    if(allDig){
+      for(int a = 0; a < strlen(gpaIn); a++){
+	if(gpaIn[a]!='.'){
+	  gpaNum += (gpaIn[a]-48);
+	  gpaNum *= 10;
+	}else{
+	  gpaNum /= 10;
+	  decInd = a;
+	  continue;
+	}
+      }
+      for(int a = strlen(gpaIn)-1; a > decInd; a--){
+	gpaNumL += (gpaIn[a]-48);
+	gpaNumL /= 10;
+      } 
+      
+      
+      break;
+    }
+    cout << "That GPA does not exist..." << endl;
   }
   
 }

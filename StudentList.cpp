@@ -7,7 +7,7 @@ using namespace std;
 struct Student{
   char fNm[46];
   char lNm[46];
-  int id;
+  int char[8];
   float gpa;
 };
 
@@ -23,12 +23,22 @@ void add(vector<Student*>* stuList){
   stuList->push_back(new Student());
       
   while(true){
+    bool noSpace = true;
+    
     cin.get(stuList->at(stuList->size()-1)->fNm, 50);
     cin.clear();
     cin.ignore(999, '\n');
 
-    if(stuList->at(stuList->size()-1)->fNm != NULL){
-      break;
+    if(strlen(stuList->at(stuList->size()-1)->fNm) != 0){
+      for(int a = 0; a < strlen(stuList->at(stuList->size()-1)->fNm); a++){
+	if(stuList->at(stuList->size()-1)->fNm[a] == ' '){
+	  noSpace = false;
+	}
+      }
+      if(noSpace){
+	noSpace = true;
+	break;
+      }
     }
 
     cout << "The student's first name is empty..." << endl;
@@ -37,16 +47,24 @@ void add(vector<Student*>* stuList){
   cout << "Please enter the last name of the student" << endl;
       
   while(true){
-	
+    bool noSpace = true;
+    
     cin.get(stuList->at(stuList->size()-1)->lNm, 50);
     cin.clear();
     cin.ignore(999, '\n');
 
-    if(stuList->at(stuList->size()-1)->lNm != NULL){
-      break;
+    if(strlen(stuList->at(stuList->size()-1)->lNm) != 0){
+      for(int a = 0; a < strlen(stuList->at(stuList->size()-1)->lNm); a++){
+	if(stuList->at(stuList->size()-1)->lNm[a] == ' '){
+	  noSpace = false;
+	}
+      }
+      if(noSpace){
+	break;
+      }
     }
 
-    cout << "At least put \"snow\" or something" << endl;
+    cout << "At least put \"Joe\" or something" << endl;
   }
 
   cout << "Please enter the ID of the student" << endl;
@@ -55,7 +73,6 @@ void add(vector<Student*>* stuList){
 
     bool sixlen = false;
     bool alldigit = true;
-    int numIn = 0;
     char in[8] = "";
     cin.get(in, 8);
     cin.clear();
@@ -66,21 +83,18 @@ void add(vector<Student*>* stuList){
 	alldigit = false;
       }
     }
+    
     if(alldigit && strlen(in) == 6){
+      /*
       for(int a = 0; a < strlen(in); a++){
 	numIn += (in[a]-48);
 	numIn *= 10;
       }
       numIn/=10;
-      stuList->at(stuList->size()-1)->id = numIn;
+      */
+      stuList->at(stuList ->size()-1)->id = numIn;  
       break;
     }
-    
-    int a;
-    cin >> a;
-    cin.clear();
-    cin.ignore(999, '\n');
-    
     cout << "Please enter a six digit number" << endl;
   }
 
@@ -116,20 +130,18 @@ void add(vector<Student*>* stuList){
 	}else{
 	  gpaNum /= 10;
 	  decInd = a;
-	  continue;
+	  break;
 	}
       }
       for(int a = strlen(gpaIn)-1; a > decInd; a--){
 	gpaNumL += (gpaIn[a]-48);
 	gpaNumL /= 10;
-      } 
-      
-      
+      }
+      stuList->at(stuList ->size()-1)->gpa = gpaNum+gpaNumL;
       break;
     }
     cout << "That GPA does not exist..." << endl;
   }
-  
 }
 
 void getRid(vector<Student*>* stuList){
@@ -138,7 +150,7 @@ void getRid(vector<Student*>* stuList){
 
 void print(vector<Student*>* stuList){
   for(int a = 0; a < stuList->size(); a++){
-    cout << "First Name: " << stuList->at(a)->fNm << "." << "Last Name: " << stuList->at(a)->lNm << "." << "ID: " << stuList->at(a)->id << "." << "GPA: " << stuList->at(a)->gpa << endl;  
+    cout << "First Name: " << stuList->at(a)->fNm << ". " << "Last Name: " << stuList->at(a)->lNm << ". " << "ID: " << stuList->at(a)->id << ". " << "GPA: " << stuList->at(a)->gpa << endl;  
   }
 }
 
@@ -171,7 +183,7 @@ int main(){
 	commandIn[a] = toupper(commandIn[a]);
       }
       
-      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "PRINT") || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
+      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "PRINT") == 0 || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
 	break;
       }
       

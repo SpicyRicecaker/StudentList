@@ -7,7 +7,7 @@ using namespace std;
 struct Student{
   char fNm[46];
   char lNm[46];
-  int char[8];
+  char id[8];
   float gpa;
 };
 
@@ -85,14 +85,14 @@ void add(vector<Student*>* stuList){
     }
     
     if(alldigit && strlen(in) == 6){
-      /*
+      /* Dropped this since an input of 000001 would just result in 1, might conve
       for(int a = 0; a < strlen(in); a++){
 	numIn += (in[a]-48);
 	numIn *= 10;
       }
       numIn/=10;
       */
-      stuList->at(stuList ->size()-1)->id = numIn;  
+      strcpy(stuList->at(stuList ->size()-1)->id, in);  
       break;
     }
     cout << "Please enter a six digit number" << endl;
@@ -137,7 +137,7 @@ void add(vector<Student*>* stuList){
 	gpaNumL += (gpaIn[a]-48);
 	gpaNumL /= 10;
       }
-      stuList->at(stuList ->size()-1)->gpa = gpaNum+gpaNumL;
+      stuList->at(stuList ->size()-1)->gpa = (int)((gpaNum+gpaNumL+.005)*100)/100.0;
       break;
     }
     cout << "That GPA does not exist..." << endl;
@@ -150,7 +150,7 @@ void getRid(vector<Student*>* stuList){
 
 void print(vector<Student*>* stuList){
   for(int a = 0; a < stuList->size(); a++){
-    cout << "First Name: " << stuList->at(a)->fNm << ". " << "Last Name: " << stuList->at(a)->lNm << ". " << "ID: " << stuList->at(a)->id << ". " << "GPA: " << stuList->at(a)->gpa << endl;  
+    cout << "First Name: " << stuList->at(a)->fNm << " " << "Last Name: " << stuList->at(a)->lNm << " " << "ID: " << stuList->at(a)->id << " " << "GPA: " << stuList->at(a)->gpa << endl;  
   }
 }
 

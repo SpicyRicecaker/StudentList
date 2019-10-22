@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <iterator>
 
 using namespace std;
 
@@ -85,77 +86,115 @@ void add(vector<Student*>* stuList){
     }
     
     if(alldigit && strlen(in) == 6){
-      /* Dropped this since an input of 000001 would just result in 1, might conve
+      /* dropped this since an input of 000001 would just result in 1, might conve
       for(int a = 0; a < strlen(in); a++){
-	numIn += (in[a]-48);
-	numIn *= 10;
+	numin += (in[a]-48);
+	numin *= 10;
       }
-      numIn/=10;
+      numin/=10;
       */
-      strcpy(stuList->at(stuList ->size()-1)->id, in);  
+      strcpy(stulist->at(stulist ->size()-1)->id, in);  
       break;
     }
-    cout << "Please enter a six digit number" << endl;
+    cout << "please enter a six digit number" << endl;
   }
 
-  cout << "Please enter the GPA of the student" << endl;
+  cout << "please enter the gpa of the student" << endl;
 
   while(true){
-    float gpaNum = 0;
-    float gpaNumL = 0;
-    char gpaIn[34];
-    int decInd = 0;
-    bool allDig = true;
-    bool onePeriod = false;
-    cin.get(gpaIn, 34);
+    float gpanum = 0;
+    float gpanuml = 0;
+    char gpain[34];
+    int decind = 0;
+    bool alldig = true;
+    bool oneperiod = false;
+    cin.get(gpain, 34);
     cin.clear();
     cin.ignore(999, '\n');
-    for(int a = 0; a < strlen(gpaIn); a++){
-      if(gpaIn[a]=='.' && onePeriod == false){
-	onePeriod = true;
-	if(gpaIn[a+1]==0){
-	  allDig = false;
+    for(int a = 0; a < strlen(gpain); a++){
+      if(gpain[a]=='.' && oneperiod == false){
+	oneperiod = true;
+	if(gpain[a+1]==0){
+	  alldig = false;
 	  break;
 	}
-      }else if(!isdigit(gpaIn[a])){
-	allDig = false;
+      }else if(!isdigit(gpain[a])){
+	alldig = false;
 	break;
       }
     }
-    if(allDig){
-      for(int a = 0; a < strlen(gpaIn); a++){
-	if(gpaIn[a]!='.'){
-	  gpaNum += (gpaIn[a]-48);
-	  gpaNum *= 10;
+    if(alldig){
+      for(int a = 0; a < strlen(gpain); a++){
+	if(gpain[a]!='.'){
+	  gpanum += (gpain[a]-48);
+	  gpanum *= 10;
 	}else{
-	  gpaNum /= 10;
-	  decInd = a;
+	  gpanum /= 10;
+	  decind = a;
 	  break;
 	}
       }
-      for(int a = strlen(gpaIn)-1; a > decInd; a--){
-	gpaNumL += (gpaIn[a]-48);
-	gpaNumL /= 10;
+      for(int a = strlen(gpain)-1; a > decind; a--){
+	gpanuml += (gpain[a]-48);
+	gpanuml /= 10;
       }
-      stuList->at(stuList ->size()-1)->gpa = (int)((gpaNum+gpaNumL+.005)*100)/100.0;
+      stulist->at(stulist ->size()-1)->gpa = gpanum+gpanuml;
       break;
     }
-    cout << "That GPA does not exist..." << endl;
+    cout << "that gpa does not exist..." << endl;
   }
 }
 
-void getRid(vector<Student*>* stuList){
-  
+void getrid(vector<student*>* stulist){
+  cout << "please enter the id of the student" << endl;
+
+  while(true){
+
+    bool exists = false;
+    bool alldigit = true;
+    char in[8] = "";
+    cin.get(in, 8);
+    cin.clear();
+    cin.ignore(999, '\n');
+
+    for(int a = 0; a < strlen(in); a++){
+      if(!isdigit(in[a])){
+	alldigit = false;
+      }
+    }
+    
+    if(alldigit && strlen(in) == 6){
+
+      vector<student*>::iterator stulistiterator;
+
+      for(stulistiterator=stulist->begin(); stulistiterator!=stulist->end(); ++stulistiterator){
+	if(strcmp((*stulistiterator)->id, in) == 0){
+	  delete *stulistiterator;
+	  stulist->erase(stulistiterator);
+	  return;
+	}
+      }
+
+      cout << "that id does not exist. please enter something else..." << endl;
+    }
+    cout << "please enter a six digit number" << endl;
+  }
 }
 
-void print(vector<Student*>* stuList){
-  for(int a = 0; a < stuList->size(); a++){
-    cout << "First Name: " << stuList->at(a)->fNm << " " << "Last Name: " << stuList->at(a)->lNm << " " << "ID: " << stuList->at(a)->id << " " << "GPA: " << stuList->at(a)->gpa << endl;  
+void print(vector<student*>* stulist){
+  vector<student*>::iterator stulistiterator;
+
+  for(stulistiterator=stulist->begin(); stulistiterator!=stulist->end(); ++stulistiterator){
+    cout << (*stulistiterator)->fnm << ", " << (*stulistiterator)->lnm << ", " << (*stulistiterator)->id << ", " << (*stulistiterator)->gpa << endl;
+  }
+
+  if(stulist->begin() == stulist->end()){
+    cout << "no students found!" << endl;
   }
 }
 
 void quit(bool &running){
-  cout << "Program Will Now Exit." << endl;
+  cout << "program will now exit." << endl;
   running = false;
 }
 
@@ -163,47 +202,51 @@ void quit(bool &running){
 
 int main(){
 
-  char commandIn[8] = "";
+  cout.setf(ios::fixed);
+  cout.setf(ios::showpoint);
+  cout.precision(2);
+
+  char commandin[8] = "";
   
   bool running = true;
 
-  vector<Student*> stuL;
-  vector<Student*>* stuList = &stuL;
+  vector<student*> stul;
+  vector<student*>* stulist = &stul;
   
   while(running){
   
-  cout << "Please enter a command. Type \"HELP\" for help." << endl;
+    cout << "Please enter a command. Type \"help\" for help." << endl;
 
     while(true){
-      cin.get(commandIn, 8);
+      cin.get(commandin, 8);
       cin.clear();
       cin.ignore(999, '\n');
 
-      for(int a = 0; a < strlen(commandIn); a++){
-	commandIn[a] = toupper(commandIn[a]);
+      for(int a = 0; a < strlen(commandin); a++){
+	commandin[a] = toupper(commandin[a]);
       }
       
-      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "PRINT") == 0 || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
+      if(strcmp(commandin, "add") == 0 || strcmp(commandin, "print") == 0 || strcmp(commandin, "delete") == 0 || strcmp(commandin, "quit") == 0 || strcmp(commandin, "help") == 0){ 
 	break;
       }
       
-      cout << "Please enter a valid command, and type \"HELP\" for help. :)" << endl;
+      cout << "please enter a valid command, and type \"help\" for help. :)" << endl;
       
     }
 
-    if(strcmp(commandIn, "ADD") == 0){
-      add(stuList);      
-    }else if(strcmp(commandIn, "PRINT") == 0){
-      print(stuList);
+    if(strcmp(commandin, "add") == 0){
+      add(stulist);      
+    }else if(strcmp(commandin, "print") == 0){
+      print(stulist);
     }
-    else if(strcmp(commandIn, "DELETE") == 0){
-      getRid(stuList);
+    else if(strcmp(commandin, "delete") == 0){
+      getrid(stulist);
     }
-    else if(strcmp(commandIn, "QUIT") == 0){
+    else if(strcmp(commandin, "quit") == 0){
       quit(running);
     }
-    else if(strcmp(commandIn, "HELP") == 0){
-      cout << "Type \"ADD\" to add a new student. Type \"DELETE\" to delete a student. Type \"QUIT\" to exit the program." << endl;
+    else if(strcmp(commandin, "help") == 0){
+      cout << "Type \"add\" to add a new student. Type \"delete\" to delete a student. type \"quit\" to exit the program.\n" << endl;
     } 
     
     

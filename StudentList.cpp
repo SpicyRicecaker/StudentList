@@ -1,3 +1,9 @@
+/*
+  Author: Andy Li
+  Date: 10/24/2019
+  StudentList: A program that can store the first name, last name, id, and gpa of multiple students using vectors. It features 3 main functions: the add, delete, and print functions, which can add a new student to the list, remove a student from the list based on their ID, and print out the list of students, respectively.  
+  
+*/
 #include <iostream>
 #include <cstring>
 #include <vector>
@@ -5,6 +11,7 @@
 
 using namespace std;
 
+//A student needs a first name, last name, id, and gpa. 
 struct Student{
   char fNm[46];
   char lNm[46];
@@ -17,42 +24,52 @@ void getRid(vector<Student*>* stuList);
 void print(vector<Student*>* stuList);
 void quit(bool &running);
 
+//The add method prompts the user for the firstname, lastname, id, and gpa of a student and adds that student along into the list of students, making sure to validate user input.
 void add(vector<Student*>* stuList){
-  
-  cout << "Please enter the first name of the student." << endl;
 
+  //Prompting the user for the first name
+  cout << "Please enter the first name of the student. :)" << endl;
+
+  //Allocates the student to heap memory
   stuList->push_back(new Student());
       
   while(true){
     bool noSpace = true;
-    
+
+    //Get the user input, store it into the vector, reset error flags, ignore the characters after the first 50
     cin.get(stuList->at(stuList->size()-1)->fNm, 50);
     cin.clear();
-    cin.ignore(999, '\n');
+    cin.ignore(999,'\n');
 
+    //If the fullname does not equal null
     if(strlen(stuList->at(stuList->size()-1)->fNm) != 0){
+      //Check if there are no spaces
       for(int a = 0; a < strlen(stuList->at(stuList->size()-1)->fNm); a++){
 	if(stuList->at(stuList->size()-1)->fNm[a] == ' '){
 	  noSpace = false;
 	}
       }
       if(noSpace){
+	//Then continue
 	noSpace = true;
 	break;
       }
     }
 
-    cout << "The student's first name is empty..." << endl;
+    //If input is null or has space
+    cout << "The student's first name is empty, or includes spaces... :/" << endl;
   }
 
-  cout << "Please enter the last name of the student" << endl;
-      
+  //Prompt user for last name 
+  cout << "Please enter the last name of the student. :)" << endl;
+
+  //Then validate user input the same way as first name
   while(true){
     bool noSpace = true;
     
     cin.get(stuList->at(stuList->size()-1)->lNm, 50);
     cin.clear();
-    cin.ignore(999, '\n');
+    cin.ignore(999,'\n');
 
     if(strlen(stuList->at(stuList->size()-1)->lNm) != 0){
       for(int a = 0; a < strlen(stuList->at(stuList->size()-1)->lNm); a++){
@@ -65,93 +82,112 @@ void add(vector<Student*>* stuList){
       }
     }
 
-    cout << "At least put \"Joe\" or something" << endl;
+    cout << "At least put \"Snow\" or something :o" << endl;
   }
-
-  cout << "Please enter the ID of the student" << endl;
+  
+  //Prompt user for ID of the student
+  cout << "Please enter the ID of the student. :)" << endl;
 
   while(true){
-
-    bool sixlen = false;
+    
     bool alldigit = true;
+
     char in[8] = "";
+
+    //Get input
     cin.get(in, 8);
     cin.clear();
     cin.ignore(999, '\n');
 
+    //Make sure that the input is all digits
     for(int a = 0; a < strlen(in); a++){
       if(!isdigit(in[a])){
 	alldigit = false;
       }
     }
-    
+
+    //If it's also 6 characters in length then continue
     if(alldigit && strlen(in) == 6){
-      /* dropped this since an input of 000001 would just result in 1, might conve
-      for(int a = 0; a < strlen(in); a++){
-	numin += (in[a]-48);
-	numin *= 10;
-      }
-      numin/=10;
-      */
-      strcpy(stulist->at(stulist ->size()-1)->id, in);  
+      strcpy(stuList->at(stuList ->size()-1)->id, in);  
       break;
     }
-    cout << "please enter a six digit number" << endl;
+    cout << "Please enter a six digit number. :/" << endl;
   }
 
-  cout << "please enter the gpa of the student" << endl;
+  //Prompt user for gpa
+  cout << "Please enter the gpa of the student. :)" << endl;
 
   while(true){
-    float gpanum = 0;
-    float gpanuml = 0;
-    char gpain[34];
-    int decind = 0;
-    bool alldig = true;
-    bool oneperiod = false;
-    cin.get(gpain, 34);
+    char gpaIn[34];
+    
+    //Numbers that will be used to calculate number to the left and right of the decimal
+    float gpaNum = 0;
+    float gpaNuml = 0;
+    int decInd = 0;
+
+    //All digits and only one decimal point
+    bool allDig = true;
+    bool onePeriod = false;
+
+    //Get input
+    cin.get(gpaIn, 34);
     cin.clear();
     cin.ignore(999, '\n');
-    for(int a = 0; a < strlen(gpain); a++){
-      if(gpain[a]=='.' && oneperiod == false){
-	oneperiod = true;
-	if(gpain[a+1]==0){
-	  alldig = false;
+
+    //For each character of the input
+    for(int a = 0; a < strlen(gpaIn); a++){
+      //If we've found the period for the first time
+      if(gpaIn[a]=='.' && onePeriod == false){
+	//Set onePeriod to true
+	onePeriod = true;
+	//Then check if there are numbers to the right of the decimal
+	if(gpaIn[a+1]==0){
+	  //If not, input is bad
+	  allDig = false;
 	  break;
 	}
-      }else if(!isdigit(gpain[a])){
-	alldig = false;
+	//Otherwise, if we've stumbled across a second period, or something not a digit
+      }else if(!isdigit(gpaIn[a])){
+	//Input is bad
+	allDig = false;
 	break;
       }
     }
-    if(alldig){
-      for(int a = 0; a < strlen(gpain); a++){
-	if(gpain[a]!='.'){
-	  gpanum += (gpain[a]-48);
-	  gpanum *= 10;
+    //If input isn't bad
+    if(allDig){
+      //Convert from constant char array to float, then add to student list
+      for(int a = 0; a < strlen(gpaIn); a++){
+	if(gpaIn[a]!='.'){
+	  gpaNum += (gpaIn[a]-48);
+	  gpaNum *= 10;
 	}else{
-	  gpanum /= 10;
-	  decind = a;
+	  gpaNum /= 10;
+	  decInd = a;
 	  break;
 	}
       }
-      for(int a = strlen(gpain)-1; a > decind; a--){
-	gpanuml += (gpain[a]-48);
-	gpanuml /= 10;
+      for(int a = strlen(gpaIn)-1; a > decInd; a--){
+	gpaNuml += (gpaIn[a]-48);
+	gpaNuml /= 10;
       }
-      stulist->at(stulist ->size()-1)->gpa = gpanum+gpanuml;
+      stuList->at(stuList ->size()-1)->gpa = gpaNum+gpaNuml;
       break;
     }
-    cout << "that gpa does not exist..." << endl;
+    cout << "That gpa does not exist... :/" << endl;
   }
+  cout << "Student added! :)" << endl;
 }
 
-void getrid(vector<student*>* stulist){
-  cout << "please enter the id of the student" << endl;
+//The getRid method prompts the user for an ID of a student and removes it from the studentList
+void getRid(vector<Student*>* stuList){
+
+  //Prompt and validate userinput for the ID of a student
+  cout << "Please enter the id of the student. :)" << endl;
 
   while(true){
 
     bool exists = false;
-    bool alldigit = true;
+    bool allDig = true;
     char in[8] = "";
     cin.get(in, 8);
     cin.clear();
@@ -159,94 +195,106 @@ void getrid(vector<student*>* stulist){
 
     for(int a = 0; a < strlen(in); a++){
       if(!isdigit(in[a])){
-	alldigit = false;
+	allDig = false;
       }
     }
-    
-    if(alldigit && strlen(in) == 6){
 
-      vector<student*>::iterator stulistiterator;
+    //If input is good
+    if(allDig && strlen(in) == 6){
 
-      for(stulistiterator=stulist->begin(); stulistiterator!=stulist->end(); ++stulistiterator){
-	if(strcmp((*stulistiterator)->id, in) == 0){
-	  delete *stulistiterator;
-	  stulist->erase(stulistiterator);
+      //Create an iterator of the student list
+      vector<Student*>::iterator stuListIterator;
+
+      //Run through the iterator
+      for(stuListIterator=stuList->begin(); stuListIterator!=stuList->end(); ++stuListIterator){
+	if(strcmp((*stuListIterator)->id, in) == 0){
+	  //Delete the data that the iterator is pointing to and remove it from the student list
+	  delete *stuListIterator;
+	  stuList->erase(stuListIterator);
+	  cout << "Student removed! :)" << endl;
 	  return;
 	}
       }
-
-      cout << "that id does not exist. please enter something else..." << endl;
+      
+      cout << "That id does not exist. :o" << endl;
+      return;
     }
-    cout << "please enter a six digit number" << endl;
+    cout << "Please enter a six digit number. :)" << endl;
   }
 }
 
-void print(vector<student*>* stulist){
-  vector<student*>::iterator stulistiterator;
+//The print function prints the first and last name, ID, and gpa of all students in the student list
+void print(vector<Student*>* stuList){
+  //Make an iterator for the student list
+  vector<Student*>::iterator stuListIterator;
 
-  for(stulistiterator=stulist->begin(); stulistiterator!=stulist->end(); ++stulistiterator){
-    cout << (*stulistiterator)->fnm << ", " << (*stulistiterator)->lnm << ", " << (*stulistiterator)->id << ", " << (*stulistiterator)->gpa << endl;
+  //Loop through the iterator, access the elements and print them
+  for(stuListIterator=stuList->begin(); stuListIterator!=stuList->end(); ++stuListIterator){
+    cout << (*stuListIterator)->fNm << ", " << (*stuListIterator)->lNm << ", " << (*stuListIterator)->id << ", " << (*stuListIterator)->gpa << endl;
   }
 
-  if(stulist->begin() == stulist->end()){
-    cout << "no students found!" << endl;
+  if(stuList->begin() == stuList->end()){
+    cout << "No students found! :)))" << endl;
   }
 }
 
+//The quit function exits the program
 void quit(bool &running){
-  cout << "program will now exit." << endl;
+  cout << "Program will now exit. CY@! ;)" << endl;
   running = false;
 }
 
-
-
+//The main method for student list
 int main(){
 
+  //Format output to two decimal points
   cout.setf(ios::fixed);
   cout.setf(ios::showpoint);
   cout.precision(2);
 
-  char commandin[8] = "";
+  char commandIn[8] = "";
   
   bool running = true;
 
-  vector<student*> stul;
-  vector<student*>* stulist = &stul;
+  //Make a vector of student pointers, then make a pointer to a vector of student pointers
+  vector<Student*> stuL;
+  vector<Student*>* stuList = &stuL;
   
   while(running){
   
-    cout << "Please enter a command. Type \"help\" for help." << endl;
-
+    //Prompt and validate user for a command, then transition to the corresponding function accordingly
+    cout << "Please enter a command. Type \"help\" for help. :)" << endl;
+    
     while(true){
-      cin.get(commandin, 8);
+      cin.get(commandIn, 8);
       cin.clear();
       cin.ignore(999, '\n');
 
-      for(int a = 0; a < strlen(commandin); a++){
-	commandin[a] = toupper(commandin[a]);
+      for(int a = 0; a < strlen(commandIn); a++){
+	commandIn[a] = toupper(commandIn[a]);
       }
       
-      if(strcmp(commandin, "add") == 0 || strcmp(commandin, "print") == 0 || strcmp(commandin, "delete") == 0 || strcmp(commandin, "quit") == 0 || strcmp(commandin, "help") == 0){ 
+      if(strcmp(commandIn, "ADD") == 0 || strcmp(commandIn, "PRINT") == 0 || strcmp(commandIn, "DELETE") == 0 || strcmp(commandIn, "QUIT") == 0 || strcmp(commandIn, "HELP") == 0){ 
 	break;
       }
       
-      cout << "please enter a valid command, and type \"help\" for help. :)" << endl;
+      cout << "Please enter a valid command, and type \"help\" for help. :)" << endl;
       
     }
 
-    if(strcmp(commandin, "add") == 0){
-      add(stulist);      
-    }else if(strcmp(commandin, "print") == 0){
-      print(stulist);
+    if(strcmp(commandIn, "ADD") == 0){
+      add(stuList);      
+    }else if(strcmp(commandIn, "PRINT") == 0){
+      print(stuList);
     }
-    else if(strcmp(commandin, "delete") == 0){
-      getrid(stulist);
+    else if(strcmp(commandIn, "DELETE") == 0){
+      getRid(stuList);
     }
-    else if(strcmp(commandin, "quit") == 0){
+    else if(strcmp(commandIn, "QUIT") == 0){
       quit(running);
     }
-    else if(strcmp(commandin, "help") == 0){
-      cout << "Type \"add\" to add a new student. Type \"delete\" to delete a student. type \"quit\" to exit the program.\n" << endl;
+    else if(strcmp(commandIn, "HELP") == 0){
+      cout << "Type \"add\" to add a new student. Type \"delete\" to delete a student. type \"quit\" to exit the program. :)\n" << endl;
     } 
     
     
